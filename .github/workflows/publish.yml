@@ -1,0 +1,50 @@
+name: Publish to PyPI
+
+# Triggered by either a GitHub Release or a manual `workflow_dispatch`.
+# Uses PyPI Trusted Publishing (OIDC) — NO API tokens stored in the repo.
+#
+# One-time setup (do once, then every release auto-publishes):
+#   1. Sign in at https://pypi.org
+#   2. Account settings → Publishing → "Add a new pending publisher"
+#   3. Fill in:
+#        Project name:   langchain-graph-advocate
+#        Owner:          PaulieB14
+#        Repository:     langchain-graph-advocate
+#        Workflow name:  publish.yml
+#        Environment:    pypi   (optional but recommended)
+#   4. Save.
+#
+# After setup, run:
+#     gh release create v0.1.0 --generate-notes
+# and this workflow auto-publishes the wheel + sdist to PyPI.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/langchain-graph-advocate
+    permissions:
+      id-token: write    # required for OIDC trusted publishing
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build
+        run: python -m pip install --upgrade build
+
+      - name: Build wheel + sdist
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
