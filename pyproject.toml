@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "langchain-graph-advocate"
-version = "0.1.1"
+version = "0.1.2"
 description = "LangChain tool wrapper for Graph Advocate — onchain data routing via plain-English queries (subgraphs, GraphQL, REST)."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -32,10 +32,10 @@ dependencies = [
 
 [project.optional-dependencies]
 x402 = [
-    # Auto-pay support — installs the x402 SDK so agents can pay-as-you-go
-    # past the 10/day free tier without writing payment-handling code.
-    "x402>=2.6,<3.0",
-    "eth-account>=0.10,<1.0",
+    # Auto-pay support — installs the x402 SDK with EVM signing deps so the
+    # wrapper can pay $0.01 USDC per query on Base. The `[evm]` extra on
+    # x402 pulls in web3 + eth-account, which the EVM signers need.
+    "x402[evm]>=2.6,<3.0",
 ]
 dev = [
     "pytest>=7.0",

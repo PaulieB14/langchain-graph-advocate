@@ -17,7 +17,7 @@ For paid usage past the free tier, pass an ``x402_private_key``::
     tool = GraphAdvocateTool(x402_private_key=os.environ["X402_PRIVATE_KEY"])
 """
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 from .tool import GraphAdvocateTool, GraphAdvocateInput  # noqa: E402
 
