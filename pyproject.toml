@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "langchain-graph-advocate"
+version = "0.1.0"
+description = "LangChain tool wrapper for Graph Advocate — onchain data routing via plain-English queries (subgraphs, GraphQL, REST)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "PaulieB14", email = "barba334@gmail.com" }]
+keywords = [
+    "langchain", "graph-protocol", "subgraph", "graphql",
+    "x402", "agent", "ai-agent", "blockchain", "ethereum",
+    "wallet", "defi", "uniswap", "aave", "ens", "polymarket",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "langchain-core>=0.3,<1.0",
+    "httpx>=0.27,<1.0",
+    "pydantic>=2.0,<3.0",
+]
+
+[project.optional-dependencies]
+x402 = [
+    # Auto-pay support — installs the x402 SDK so agents can pay-as-you-go
+    # past the 10/day free tier without writing payment-handling code.
+    "x402>=2.6,<3.0",
+    "eth-account>=0.10,<1.0",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+    "ruff>=0.1",
+]
+
+[project.urls]
+Homepage = "https://graphadvocate.com"
+Documentation = "https://docs.graphadvocate.com"
+Repository = "https://github.com/PaulieB14/langchain-graph-advocate"
+"Source (Graph Advocate)" = "https://github.com/PaulieB14/graph-advocate"
+
+[tool.setuptools.packages.find]
+include = ["langchain_graph_advocate*"]
