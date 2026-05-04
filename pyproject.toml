@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "langchain-graph-advocate"
-version = "0.1.0"
+version = "0.1.1"
 description = "LangChain tool wrapper for Graph Advocate — onchain data routing via plain-English queries (subgraphs, GraphQL, REST)."
 readme = "README.md"
 requires-python = ">=3.10"

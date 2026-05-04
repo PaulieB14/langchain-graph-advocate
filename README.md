@@ -8,45 +8,49 @@ Token API.
 - 15,500+ subgraphs across 20+ chains
 - Wallet balances, token holders, DEX swaps, NFTs, lending data, prediction
   markets, ENS domains, ERC-8004 agent discovery
-- Free first 10 queries/day per sender; $0.01 USDC after via x402 (Base)
+- $0.01 USDC per query via x402 on Base (auto-pay built in)
 
 ## Install
 
 ```bash
-pip install langchain-graph-advocate
-
-# Optional: paid usage past the free tier
+# Includes x402 SDK by default — required to make paid calls
 pip install 'langchain-graph-advocate[x402]'
+
+# Or core only (returns HTTP 402 helper info on every call)
+pip install langchain-graph-advocate
 ```
 
 ## Quick start
 
-### Free tier (no setup)
-
 ```python
+import os
 from langchain_graph_advocate import GraphAdvocateTool
 
-tool = GraphAdvocateTool()
+# x402_private_key is required to pay $0.01 USDC per query.
+# The signing wallet needs USDC on Base — bridge at bridge.base.org.
+tool = GraphAdvocateTool(
+    x402_private_key=os.environ["X402_PRIVATE_KEY"],
+)
 
 result = tool.invoke({"request": "Top 20 USDC holders on Ethereum"})
 print(result)
 # Returns JSON with recommendation, query_ready, curl_example, alternatives
 ```
 
-### Paid mode (auto-pay past free tier)
+### What happens without an x402 key
+
+The endpoint returns HTTP 402. The tool surfaces this as a structured
+JSON error containing the `pay_to` address, network, and onboarding info,
+so the agent can decide whether to acquire USDC and retry — or the user
+can fund the wallet ahead of time.
 
 ```python
-import os
-from langchain_graph_advocate import GraphAdvocateTool
-
-tool = GraphAdvocateTool(
-    x402_private_key=os.environ["X402_PRIVATE_KEY"],
-    max_usdc_per_call=0.05,
-)
+# No key — tool still returns a structured response, just not data
+tool = GraphAdvocateTool()
+result = tool.invoke({"request": "anything"})
+# {"error": "payment_required", "price_usdc": 0.01, "network": "eip155:8453",
+#  "pay_to": "0x0FF5A6...", "facilitator": "https://api.cdp.coinbase.com/...", ...}
 ```
-
-The wallet that signs payments needs USDC on Base. Get USDC at
-[bridge.base.org](https://bridge.base.org) or any DEX.
 
 ### Use it in an agent
 
